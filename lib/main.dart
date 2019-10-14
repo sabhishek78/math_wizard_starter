@@ -13,13 +13,37 @@ class QuizPage extends StatefulWidget {
   _QuizPageState createState() => _QuizPageState();
 }
 Random rand= Random();
+int x;
+int y;
+String userInput;
+int score=0;
 class _QuizPageState extends State<QuizPage> {
+  final myController = TextEditingController();
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    myController.dispose();
+    super.dispose();
+  }
+  updateScore(){
+    int answer=int.parse(userInput);
+    if(answer==x+y)
+      {
+        score=score+10;
+      }
+    else{
+      score=score-5;
 
-int x=rand.nextInt(99);
-int y=rand.nextInt(99);
+    }
+
+  }
+
 
   @override
   Widget build(BuildContext context) {
+    x=rand.nextInt(99);
+    y=rand.nextInt(99);
+
     return Scaffold(
       backgroundColor: Colors.green[200],
       appBar: AppBar(
@@ -30,31 +54,30 @@ int y=rand.nextInt(99);
       body: Container(
         child:
           Column(
-            //mainAxisAlignment: MainAxisAlignment.,
-            //crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+           // crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Text('$x'),
-                  Text('+'),
-                  Text('$y'),
-                  Text('='),
+                  Text('$x',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 60,color: Colors.blue,)),
+                  Text('+',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 60,color: Colors.blue,)),
+                  Text('$y',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 60,color: Colors.blue,)),
+                  Text('=',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 60,color: Colors.blue,)),
                   Container(
-
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      border:Border.all(
-                        color: Colors.black,
-                        width: 2.0,
+                    color: Colors.white,
+                    width: 50,
+                    height: 50,
+                    child: TextField(
+                      decoration: InputDecoration(
+                          border: OutlineInputBorder()
                       ),
+                      controller: myController,
+                      keyboardType:TextInputType.number,
                     ),
-                    child:GestureDetector(
-                        onTap: (){
+                  ),
 
-                        },
-                    ),
-                  )
-              ]
+                          ]
 
 
               ),
@@ -62,35 +85,48 @@ int y=rand.nextInt(99);
                 color: Colors.green,
 
                 onPressed: () {
-                  /*...*/
+                   userInput=myController.text;
+                   print(userInput);
+                   myController.clear();
+                   setState(() {
+                     updateScore();
+                   });
                 },
                 child: Container(
-                  width: 150,
+                  width: 100,
                   height: 50,
                   child: Text(
-                      "CHECK",textAlign:TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 40,color: Colors.white70,)
+                      "CHECK",textAlign:TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 30,color: Colors.white70,)
                   ),
                 ),
               ),
-              SizedBox(height: 50,),
+              SizedBox(height: 05,),
               FlatButton(
                 color: Colors.blue,
 
                 onPressed: () {
-                  /*...*/
+                  setState(() {
+                    x=rand.nextInt(99);
+                    y=rand.nextInt(99);
+                  });
+
                 },
                 child: Container(
-                  width: 150,
+                  width: 100,
                   height: 50,
                   child: Text(
-                      "SKIP",textAlign:TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 40,color: Colors.white70,)
+                      "SKIP",textAlign:TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 30,color: Colors.white70,)
                   ),
                 ),
               ),
               Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Text("Score"),
-                  Text("XX"),
+                  Text("Score :",textAlign:TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 60,color: Colors.green,),),
+                  SizedBox(width: 10,),
+                  Container(
+
+                      child: Text("$score",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 40,color: Colors.green),)),
                 ],
               )
             ],
